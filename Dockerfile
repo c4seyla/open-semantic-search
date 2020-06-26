@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     php-xml \
     php-bcmath \
     librabbitmq4 \
-    python3-django \
+    python3-celery \
     python3-pycurl \
     python3-rdflib \
     python3-sparqlwrapper \
@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     python3-dateutil \
     python3-lxml \
     python3-feedparser \
-    python3-celery \
     python3-pip \
     python3-setuptools \
     python3-wheel \
@@ -29,6 +28,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # install django-import-export
+RUN pip3 install Django==2.0
 RUN pip3 install --no-cache-dir django-import-export==1.2.0
 
 COPY ./src/tika-python/tika /usr/lib/python3/dist-packages/tika
@@ -95,6 +95,7 @@ COPY ./src/solr-ontology-tagger/src /usr/lib/python3/dist-packages/
 
 
 # export static files to directory for webserver
+RUN python3 -m django --version
 RUN python3 /var/lib/opensemanticsearch/manage.py collectstatic --noinput
 
 # create directory for file uploads
